@@ -1,0 +1,38 @@
+# Custom completion rules
+
+_list_apps() {
+    # Maintains a list of apps in our system
+    find $HIREIQ_ROOT/py/toomah/djangoapps -type d -maxdepth 1 | xargs  -II basename I
+}
+
+_gt_completion() {
+    APPS=`_list_apps`
+    prefix="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=( $(compgen -W "$APPS" -- $prefix) )
+    return 0
+}
+
+_manage_completion() {
+    local choices APPS SUBCOMMANDS exe
+    # This function is not remotely complete. Add more as needed
+    exe=$COMP_WORDS
+    APPS=`_list_apps`
+    # This could probably be better but my awk foo just isn't that strong
+    SUBCOMMANDS=`$exe help 2>&1 1>/dev/null  | awk '/.*Available.*/,/END/' | grep -v "Available"`
+    first="${COMP_WORDS[1]}"
+    prefix="${COMP_WORDS[COMP_CWORD]}"
+    # If its the first choice, just use commands
+    if [ "1" -eq "$COMP_CWORD" ]; then
+        choices=$SUBCOMMANDS
+    else
+        case $first in
+            'test') choices=$APPS ;;
+            *) ;;
+        esac
+    fi
+    COMPREPLY=( $(compgen -W "$choices" -- $prefix) )
+    return 0
+}
+
+complete -F _gt_completion gt
+complete -F _manage_completion m
