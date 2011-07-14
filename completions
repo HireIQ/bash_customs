@@ -5,7 +5,7 @@ _list_apps() {
     find $HIREIQ_ROOT/py/toomah/djangoapps -type d -maxdepth 1 | xargs  -II basename I
 }
 
-_gt_completion() {
+_app_completion() {
     APPS=`_list_apps`
     prefix="${COMP_WORDS[COMP_CWORD]}"
     COMPREPLY=( $(compgen -W "$APPS" -- $prefix) )
@@ -34,5 +34,6 @@ _manage_completion() {
     return 0
 }
 
-complete -F _gt_completion gt
+complete -F _app_completion gt
+complete -F _app_completion edit
 complete -F _manage_completion m

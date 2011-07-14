@@ -1,6 +1,18 @@
+app_path() {
+    [ -z "$1" ] && return -1
+    APP_PATH="$HIREIQ_ROOT/py/toomah/djangoapps/$1"
+    if [ ! -d "$APP_PATH" ]; then
+        echo "No app named $1"
+        return -1
+    fi
+}
+
 # cd, but better
 gt() {
-    [ -z "$1" ] && return -1
-    dir="$HIREIQ_ROOT/py/toomah/djangoapps/$1"
-    [ -d "$dir" ] && cd $dir || echo "No app named $1"
+    app_path $1 && cd $APP_PATH
+}
+
+# Open app in textmate
+edit() {
+    app_path $1 && mate $APP_PATH
 }
