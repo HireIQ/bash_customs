@@ -1,12 +1,25 @@
 # Custom completion rules
 
-_list_apps() {
-    # Maintains a list of apps in our system
-    find $HIREIQ_ROOT/py/toomah/djangoapps -type d -maxdepth 1 | xargs  -II basename I
+_dirs() {
+    local dir
+    dir=`basename $1`
+    find $1 -type d -maxdepth 1 | xargs  -II basename I | grep -v $dir
 }
 
-_app_completion() {
-    APPS=`_list_apps`
+_list_apps() {
+    # Maintains a list of apps in our system
+    _dirs $HIREIQ_ROOT/py/toomah/djangoapps
+}
+
+_list_pois() {
+    # All points of interest in our system
+    _list_apps | sed 's|^|apps/|'
+    _dirs $HIREIQ_ROOT/py/toomah/djangoprojects | sed 's|^|projects/|'
+    echo root
+}
+
+_poi_completion() {
+    APPS=`_list_pois`
     prefix="${COMP_WORDS[COMP_CWORD]}"
     COMPREPLY=( $(compgen -W "$APPS" -- $prefix) )
     return 0
@@ -27,6 +40,7 @@ _manage_completion() {
     else
         case $first in
             'test') choices=$APPS ;;
+            'shell') choices='--plain' ;;
             *) ;;
         esac
     fi
@@ -34,6 +48,6 @@ _manage_completion() {
     return 0
 }
 
-complete -F _app_completion gt
-complete -F _app_completion edit
+complete -F _poi_completion gt
+complete -F _poi_completion edit
 complete -F _manage_completion m

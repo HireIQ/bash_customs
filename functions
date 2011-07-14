@@ -1,8 +1,23 @@
 app_path() {
     [ -z "$1" ] && return -1
-    APP_PATH="$HIREIQ_ROOT/py/toomah/djangoapps/$1"
+    local arg category
+    arg=`basename $1`
+    category=`dirname $1`
+    [ '.' == "$category" ] && category=$1
+    case $category in
+        'root') 
+            APP_PATH="$HIREIQ_ROOT/" ;;
+        'apps')
+            APP_PATH="$HIREIQ_ROOT/py/toomah/djangoapps/$arg" ;;
+        'projects')
+            APP_PATH="$HIREIQ_ROOT/py/toomah/djangoprojects/$arg" ;;
+        *)
+            echo "No category $category"
+            return -1
+        ;;
+    esac
     if [ ! -d "$APP_PATH" ]; then
-        echo "No app named $1"
+        echo "Cannot find $1"
         return -1
     fi
 }
