@@ -7,6 +7,8 @@ app_path() {
     case $category in
         'root') 
             APP_PATH="$HIREIQ_ROOT/" ;;
+        'lib') 
+            APP_PATH="$HIREIQ_ROOT/py/toomah/lib" ;;
         'apps')
             APP_PATH="$HIREIQ_ROOT/py/toomah/djangoapps/$arg" ;;
         'projects')
