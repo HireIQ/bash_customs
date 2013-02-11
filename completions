@@ -23,6 +23,7 @@ _list_pois() {
     _dirs $HIREIQ_ROOT/py/toomah/djangoprojects | sed 's|^|projects/|'
     echo root
     echo lib
+    echo django
 }
 
 _poi_completion() {
