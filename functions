@@ -11,6 +11,8 @@ app_path() {
             APP_PATH="$HIREIQ_ROOT/py/toomah/lib" ;;
         'apps')
             APP_PATH="$HIREIQ_ROOT/py/toomah/djangoapps/$arg" ;;
+        'assessments')
+            APP_PATH="$HIREIQ_ROOT/py/toomah/assessments/$arg" ;;
         'projects')
             APP_PATH="$HIREIQ_ROOT/py/toomah/djangoprojects/$arg" ;;
         *)

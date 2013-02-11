@@ -11,9 +11,15 @@ _list_apps() {
     _dirs $HIREIQ_ROOT/py/toomah/djangoapps
 }
 
+_list_assessments() {
+    # Maintains a list of apps in our system
+    _dirs $HIREIQ_ROOT/py/toomah/assessments
+}
+
 _list_pois() {
     # All points of interest in our system
     _list_apps | sed 's|^|apps/|'
+    _list_assessments | sed 's|^|assessments/|'
     _dirs $HIREIQ_ROOT/py/toomah/djangoprojects | sed 's|^|projects/|'
     echo root
     echo lib
