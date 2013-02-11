@@ -10,7 +10,7 @@ app_path() {
         'lib') 
             APP_PATH="$HIREIQ_ROOT/py/toomah/lib" ;;
         'django')
-            APP_PATH="$HIREIQ_ROOT/ve/lib/python2.7/site-packages/django" ;;
+            APP_PATH="$(dirname $($HIREIQ_ROOT/ve/bin/python -c 'import django; print django.__file__'))" ;;
         'apps')
             APP_PATH="$HIREIQ_ROOT/py/toomah/djangoapps/$arg" ;;
         'assessments')
