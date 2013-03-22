@@ -39,7 +39,10 @@ _manage_completion() {
     exe=$COMP_WORDS
     APPS=`_list_apps`
     # This could probably be better but my awk foo just isn't that strong
-    SUBCOMMANDS=`$exe help 2>&1 1>/dev/null  | awk '/.*Available.*/,/END/' | grep -v "Available"`
+    if [ -z "$_manage_subcommands" ]; then
+        export _manage_subcommands="`$exe help 2>/dev/null  | awk '/.*Available.*/,/END/' | grep -v "Available" | grep -v '\['`"
+    fi
+    SUBCOMMANDS="$_manage_subcommands"
     SUBCOMMANDS="$SUBCOMMANDS -p" # Allow -p flag MUST BE BEFORE SUBCOMMAND
     prefix="${COMP_WORDS[COMP_CWORD]}"
     cmd=1
