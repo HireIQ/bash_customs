@@ -37,3 +37,20 @@ gt() {
 edit() {
     app_path $1 && mate $APP_PATH
 }
+
+# Find what module defines a class
+function who_defines() {
+    local module
+    module=$(grep -rl "class $1\>" $HIREIQ_ROOT/py/toomah | head -n 1 |
+           sed 's:^'$HIREIQ_ROOT'/py/':: |
+           sed 's:/:.:g')
+    [ -z $module ] || basename $module .py
+}
+
+function missing_imports() {
+    pyflakes $1 | grep "undefined name" |
+        sed "s/.*undefined name \'\\(.*\\)\'\$/\\1/" | sort -u | while read class; do
+            echo $(who_defines $class) $class
+        done | sort -u |
+        ruby -e 'a=nil; $stdin.each_line.map(&:split).each {|f, l| if l.nil? then puts "import #{f}" elsif a == f then $>.write ", #{l}" else a = f; puts; $>.write "from #{f} import #{l}" end}'; echo
+}
